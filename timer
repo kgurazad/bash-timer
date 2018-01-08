@@ -1,0 +1,41 @@
+#!/bin/bash
+x='^[0-9][0-9]?$'
+# x allows to test for bad format
+if [ -z $1 ]; then
+    echo "usage: timer minutes"
+    exit 0
+elif [ ! -z $2 ]; then
+    echo -e "\033[0;31merror\033[0m timer only takes one argument - the number of minutes" >&2
+    exit 1
+elif [[ ! $1 =~ $x ]] && [ $1 != 100 ]; then
+    echo -e "\033[0;31merror\033[0m please enter an integer number of minutes less than or equal to 100" >&2
+    exit 2
+fi
+m=$1
+s=60
+while [ $m -gt 0 ]; do
+      	m=$((m-1))
+	while [ $s -gt 0 ]; do
+		sleep 1
+		s=$((s-1))
+		if [ $m -lt 10 ]; then
+		     	if [ $s -lt 10 ]; then
+			      	printf "\r0$m:0$s"
+			else
+				printf "\r0$m:$s"
+			fi
+
+		else
+			if [ $s -lt 10 ]; then
+			        printf "\r$m:0$s"
+                	else
+				printf "\r$m:$s"
+                	fi
+		fi
+	done
+	s=60
+done
+printf "\rTime's Up!"
+while true; do
+	/usr/bin/say "Time's up!"
+done
